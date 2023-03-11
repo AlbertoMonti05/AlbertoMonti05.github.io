@@ -19,9 +19,8 @@
 	</head>
 
 	<body>
-
 		<h1>CALCOLATRICE</h1>
-		<p id = "calcolo">ciao</p>
+		<p id = "calcolo"></p>
 
 		<!-- inserisco una tabella -->
 		<!-- tr per la riga -->
@@ -32,13 +31,13 @@
 			<td><button onclick="document.getElementById('calcolo').innerHTML = '' ">C</button></td>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '(' ">(</button></td>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += ')' ">)</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '/' ">/</button></td>
+			<td><button onclick="document.getElementById('calcolo').innerHTML += ' / ' ">/</button></td>
 		  </tr>
 		  <tr>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '7' ">7</button></td>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '8' ">8</button></td>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '9' ">9</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '*' ">*</button></td>
+			<td><button onclick="document.getElementById('calcolo').innerHTML += ' * ' ">*</button></td>
 		  </tr>
 		  <tr>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '4' ">4</button></td>
@@ -50,7 +49,7 @@
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '1' ">1</button></td>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '2' ">2</button></td>
 			<td><button onclick="document.getElementById('calcolo').innerHTML += '3' ">3</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '-' ">-</button></td>
+			<td><button onclick="document.getElementById('calcolo').innerHTML += ' - ' ">-</button></td>
 		  </tr>
 		  <tr>
 			<td></td>
@@ -63,8 +62,8 @@
 		<script>
 			function risultato()
 			{
-				var risultato = document.getElementById("calcolo");
-				return eval(risultato.value);
+				var risultato = eval(document.getElementById("calcolo").value);
+				document.getElementById("calcolo").value = risultato;
 			}
 		</script>
 
