@@ -1,71 +1,77 @@
 <html>
 
 	<head>
+
 		<title>CALCOLATRICE</title>
 
 		<style>
-		table, th, td {
-		  border: 2px solid black;
-		  border-collapse: collapse;
-		}
-		th, td {
-		  padding-top: 10px;
-		  padding-bottom: 10px;
-		  padding-left: 50px;
-		  padding-right: 40px;
-		}
+			table, th, td 
+			{
+			  border: 2px solid black;
+			  border-collapse: collapse;
+			  text-align: center;
+			  margin-left: auto;
+			  margin-right: auto;
+			}
+			th, td 
+			{
+			  padding-top: 10px;
+			  padding-bottom: 10px;
+			  padding-left: 50px;
+			  padding-right: 40px;
+			}
 		</style>
+
+		<script type="text/javascript" src="Calcolatrice.js"></script>
+
+		<script type="text/javascript">
+			const miaCalcolatrice = new Calcolatrice();
+		</script>
 
 	</head>
 
 	<body>
-		<h1>CALCOLATRICE</h1>
-		<p id = "calcolo"></p>
 
-		<!-- inserisco una tabella -->
-		<!-- tr per la riga -->
-		<!-- td per il dato -->
-		<!-- th per la colonna -->
-		<table style="width:35%">
-		  <tr>
-			<td><button onclick="document.getElementById('calcolo').innerHTML = '' ">C</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '(' ">(</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += ')' ">)</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += ' / ' ">/</button></td>
-		  </tr>
-		  <tr>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '7' ">7</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '8' ">8</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '9' ">9</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += ' * ' ">*</button></td>
-		  </tr>
-		  <tr>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '4' ">4</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '5' ">5</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '6' ">6</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '+' ">+</button></td>
-		  </tr>
-		  <tr>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '1' ">1</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '2' ">2</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '3' ">3</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += ' - ' ">-</button></td>
-		  </tr>
-		  <tr>
-			<td></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += '0' ">0</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML += ',' ">,</button></td>
-			<td><button onclick="document.getElementById('calcolo').innerHTML = risultato() ">=</button></td>
-		  </tr>
-		</table>
-		
-		<script>
-			function risultato()
-			{
-				let risultato = eval(document.getElementById("calcolo"));
-				document.getElementById("calcolo").value = risultato;
-			}
-		</script>
+		<h1 style="text-align: center;">CALCOLATRICE</h1>
+
+		<div style="text-align: center;">
+			<!--casella di testo per il risultato-->
+			<input type="text" id="espressione" name="txtRis" size="70">
+			<br>
+
+			<table style="width:35%">
+				<tr>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.cancella();">C</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.cambiaSegno(document.getElementById('espressione').value);">+-</button></td>
+				<td><button onclick="document.getElementById('espressione').value = '%' ">%</button></td>
+				<td><button onclick="document.getElementById('espressione').value = ' / ' ">/</button></td>
+				</tr>
+				<tr>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(7); ">7</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(8); ">8</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(9); ">9</button></td>
+				<td><button onclick="document.getElementById('espressione').value = ' * ' ">*</button></td>
+				</tr>
+				<tr>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(4); ">4</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(5); ">5</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(6); ">6</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.somma(); ">+</button></td>
+				</tr>
+				<tr>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(1); ">1</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(2); ">2</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(3); ">3</button></td>
+				<td><button onclick="document.getElementById('espressione').value = ' - ' ">-</button></td>
+				</tr>
+				<tr>
+				<td></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(0); ">0</button></td>
+				<td><button onclick="document.getElementById('espressione').value = ',' ">,</button></td>
+				<td><button onclick="document.getElementById('espressione').value = risultato() ">=</button></td>
+				</tr>
+			</table>
+		</div>
 
 	</body>
 
