@@ -1,0 +1,62 @@
+<html>
+
+    <head>
+
+        <title>TO DO LIST</title>
+
+        <script type="text/javascript" src="CToDo.js"></script>
+        <script type="text/javascript" src="CGestioneToDo.js"></script>
+
+        <script type="text/javascript">
+
+            const gest = new CGestioneToDo();
+
+        </script>
+
+    </head>
+
+    <body>
+
+        <h1 style="text-align: center;">TO DO LIST</h1>
+
+        <p>
+
+            <table id="tblNewToDo">
+
+                <th>
+
+                    <input type="text" id="txtToDo" value="Inserisci l'evento">
+
+                </th>
+
+
+                <th>
+
+                    <input type="date" id="dateToDo">
+
+                </th>
+
+
+                <th>
+
+                    <button type="button" id="btnToDO" onclick = gest.aggiungiToDo();>aggiungi toDo</button>
+
+                </th>
+
+            </table>
+
+        </p>
+
+        <p>
+
+            <table id="tblToDo">
+
+                
+
+            </table>
+
+        </p>
+
+    </body>
+
+</html>
