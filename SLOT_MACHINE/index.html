@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>SLOT MACHINE</title>
+
+        <script type="text/javascript" src="CGestioneImmagini.js"></script>
+        <script type="text/javascript" src="CSlotMachine.js"></script>
+
+        <script type="text/javascript">
+
+            const slot = new CSlotMachine();
+
+        </script>
+
+    </head>
+
+
+
+    <body>
+
+        <p>
+
+            <table>
+
+                <th>
+                    
+                    <img id="img1" src="">
+                        
+                </th>
+
+                <th>
+                    
+                    <img id="img2" src="">
+                
+                </th>
+
+                <th>
+                    
+                    <img id="img3" src="">
+                
+                </th>
+
+            </table>
+            <br>
+
+            <button type="button" onclick = slot.start();>SPIN</button>
+            <button type="button" onclick = slot.incassa();>INCASSA</button>
+
+        </p>
+
+        <p id="crediti">crediti: 10</p>
+
+    </body>
+
+</html>
