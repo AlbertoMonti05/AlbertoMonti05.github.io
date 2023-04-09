@@ -1,21 +1,24 @@
-class Calcolatrice {
+class Calcolatrice 
+{
     /**
      * costruttore non parametrico
      * 
      * dichiara e inizializza:
      * - parziale a zero
-     * - numeroCorrente come ''
-     * - primaVolta a true
+     * - numeroCorrente come ""
+     * - operazione come ""
      */
     constructor() 
     {
         this.parziale = 0;
-        this.numeroCorrente = '';
-        this.primaVolta = true;
+        this.numeroCorrente = "";
+        this.operazione = "";
+        //this.primaVolta = true;
     }
 
     //metodo richiamato al click di uno dei bottoni numerici
-    setNumeroCorrente(numero) {
+    setNumeroCorrente(numero)
+    {
         this.numeroCorrente += numero;
 
         return this.numeroCorrente;
@@ -24,86 +27,77 @@ class Calcolatrice {
     //metodo richiamato al click del bottone '+-'
     cambiaSegno() 
     {
-        this.numeroCorrente *= -1;
+        //prendo il numero corrente in intero
+        let x = parseInt(this.numeroCorrente);
+
+        //cambio segno al numero
+        x *= -1;
+
+        //trasformo il numero in stringa
+        this.numeroCorrente = "" + x;
 
         return this.numeroCorrente;
     }
 
-    ////metodo richiamato al click del bottone 'C'
-    cancella() {
+    //metodo richiamato al click del bottone 'C'
+    cancella() 
+    {
         this.parziale = 0;
+        this.numeroCorrente = "";
 
         return this.parziale;
     }
 
-    //metodo richiamato al click del bottone '+'
-    somma()
+    somma(x)
     {
-        //sommo il numero corrente al parziale
-        this.parziale += ParseInt(this.numeroCorrente);
+        //prendo il numero corrente in intero
+        this.parziale = parseInt(this.numeroCorrente);
 
-        Window.alert("parziale = " + this.parziale)
+        //svuoto il numero corrente
+        this.numeroCorrente = "";
 
-        //imposto il numero corrente a zero
-        this.numeroCorrente = '';
+        this.operazione = "somma";
 
-        alert("numeroCorrente = " + this.numeroCorrente)
-
-        return '';
+        return this.numeroCorrente;
     }
 
-    //metodo richiamato al click del bottone '-'
-    sottrazione() {
-        //se è la prima volta che si fa un calcolo
-        if (this.primaVolta == true) {
-            //il numero corrente diventa il parziale
-            this.parziale = parseInt(this.numeroCorrente);
+    sottrazione(x)
+    {
+        //prendo il numero corrente in intero
+        this.parziale = parseInt(this.numeroCorrente);
 
-            //non sarà più la prima volta
-            this.primaVolta = false;
-        }
-        else {
-            //sottraggo al parziale il numero corrente
-            this.parziale -= parseInt(this.numeroCorrente);
-        }
+        //svuoto il numero corrente
+        this.numeroCorrente = "";
 
-        return true;
+        this.operazione = "sottrazione";
+
+        return this.numeroCorrente;
     }
 
-    //metodo richiamato al click del bottone '/'
-    divisione() {
-        //se è la prima volta che si fa un calcolo
-        if (this.primaVolta == true) {
-            //il numero corrente diventa il parziale
-            this.parziale = parseInt(this.numeroCorrente);
+    divisione(x) 
+    {
+        //prendo il numero corrente in intero
+        this.parziale = parseInt(this.numeroCorrente);
 
-            //non sarà più la prima volta
-            this.primaVolta = false;
-        }
-        else {
-            //divido il parziale per il numero corrente
-            this.parziale /= parseInt(this.numeroCorrente);
-        }
+        //svuoto il numero corrente
+        this.numeroCorrente = "";
 
-        return true;
+        this.operazione = "divisione";
+        
+        return this.numeroCorrente;
     }
 
-    //metodo richiamato al click del bottone '*'
-    moltiplicazione() {
-        //se è la prima volta che si fa un calcolo
-        if (this.primaVolta == true) {
-            //il numero corrente diventa il parziale
-            this.parziale = parseInt(this.numeroCorrente);
+    moltiplicazione(x) 
+    {
+        //prendo il numero corrente in intero
+        this.parziale = parseInt(this.numeroCorrente);
 
-            //non sarà più la prima volta
-            this.primaVolta = false;
-        }
-        else {
-            //moltiplico il parziale per il numero corrente
-            this.parziale *= parseInt(this.numeroCorrente);
-        }
+        //svuoto il numero corrente
+        this.numeroCorrente = "";
 
-        return true;
+        this.operazione = "moltiplicazione";
+
+        return this.numeroCorrente;
     }
 
     /**
@@ -113,7 +107,37 @@ class Calcolatrice {
      * 
      * @returns risultato delle operazioni effettuate
     */
-    getRis() {
+    getRis() 
+    {
+        this.eseguiCalcolo();
+
         return this.parziale;
+    }
+
+    eseguiCalcolo()
+    {
+        //prendo il numero corrente in intero
+        let x = parseInt(this.numeroCorrente);
+
+        if(this.operazione == "somma")
+        {
+            this.parziale += x;
+        }
+        else if(this.operazione == "sottrazione")
+        {
+            this.parziale -= x;
+        }
+        else if(this.operazione == "divisione")
+        {
+            this.parziale /= x;
+        }
+        else if(this.operazione == "moltiplicazione")
+        {
+            this.parziale *= x;
+        }
+
+        this.numeroCorrente = this.parziale;
+
+        return this.numeroCorrente;
     }
 }
