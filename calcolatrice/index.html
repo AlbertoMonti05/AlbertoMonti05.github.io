@@ -36,21 +36,21 @@
 
 		<div style="text-align: center;">
 			<!--casella di testo per il risultato-->
-			<input type="text" id="espressione" name="txtRis" size="70">
+			<input type="text" id="espressione" name="txtRis" size="70" style="text-align: right;">
 			<br>
 
 			<table style="width:35%">
 				<tr>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.cancella();">C</button></td>
-				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.cambiaSegno(document.getElementById('espressione').value);">+-</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.cambiaSegno();">+-</button></td>
 				<td><button onclick="document.getElementById('espressione').value = '%' ">%</button></td>
-				<td><button onclick="document.getElementById('espressione').value = ' / ' ">/</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.divisione(); ">/</button></td>
 				</tr>
 				<tr>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(7); ">7</button></td>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(8); ">8</button></td>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(9); ">9</button></td>
-				<td><button onclick="document.getElementById('espressione').value = ' * ' ">*</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.moltiplicazione(); ">*</button></td>
 				</tr>
 				<tr>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(4); ">4</button></td>
@@ -62,13 +62,13 @@
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(1); ">1</button></td>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(2); ">2</button></td>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(3); ">3</button></td>
-				<td><button onclick="document.getElementById('espressione').value = ' - ' ">-</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.sottrazione(); ">-</button></td>
 				</tr>
 				<tr>
 				<td></td>
 				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.setNumeroCorrente(0); ">0</button></td>
 				<td><button onclick="document.getElementById('espressione').value = ',' ">,</button></td>
-				<td><button onclick="document.getElementById('espressione').value = risultato() ">=</button></td>
+				<td><button onclick="document.getElementById('espressione').value = miaCalcolatrice.getRis() ">=</button></td>
 				</tr>
 			</table>
 		</div>
