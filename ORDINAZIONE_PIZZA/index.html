@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<hmtl>
+
+    <head>
+
+        <title>ORDINAZIONE PIZZA</title>
+
+        <style>
+
+            img
+            {
+                width: 100px;
+                height: 100px;
+            }
+
+            th
+            {
+                text-align: left;
+            }
+
+            .grid-container-all
+            {
+                display: grid;
+                grid-template-columns: auto auto auto;
+            }
+
+            .grid-container-pizza
+            {
+                display: grid;
+                grid-template-columns: auto auto;
+                background-color: #2196F3;
+            }
+
+            .grid-item
+            {
+                background-color: rgba(255, 255, 255, 0.8);
+                border: 1px solid rgba(0, 0, 0, 0.8);
+                font-size: 30px;
+                text-align: center;
+                border-radius: 25px;
+            }
+
+            .div-in-div-all
+            {
+                align-content: center;
+            }
+
+        </style>
+
+        <script type="text/javascript" src="CCarrello.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+        <script type="text/javascript">
+
+            let carrello = new CCarrello();
+
+        </script>
+
+
+    </head>
+
+    <body>
+
+        <div id="all" class="grid-container-all">
+
+            <div id="divPizze" class="grid-container-pizza">
+
+                <div class="grid-item" onclick="carrello.aggiungi('margherita');"><img src="immagini/margherita.jpg"><br><p>margherita</p></div>
+                <div class="grid-item" onclick="carrello.aggiungi('prosciutto');"><img src="immagini/margherita.jpg"><br><p>prosciutto</p></div> 
+                <div class="grid-item" onclick="carrello.aggiungi('diavola');"><img src="immagini/margherita.jpg"><br><p>diavola</p></div>
+                <div class="grid-item" onclick="carrello.aggiungi('funghi');"><img src="immagini/margherita.jpg"><br><p>funghi</p></div> 
+                <div class="grid-item" onclick="carrello.aggiungi('wurstel');"><img src="immagini/margherita.jpg"><br><p>wurstel</p></div>
+                <div class="grid-item" onclick="carrello.aggiungi('patatine');"><img src="immagini/margherita.jpg"><br><p>patatine</p></div>
+
+            </div>
+
+            <div id="cooker">
+
+                <img src="immagini/pizzaiolo.jpg" style="width: 300px; height: 300px">
+
+            </div>
+
+            <div id="list">
+
+                <table id="pizzas">
+
+                    <!--
+                    <tr>
+                        <th id="numMargherita">0</th>
+                        <th>margherita</th>
+                    </tr>
+
+                    <tr>
+                        <th id="numProsciutto">0</th>
+                        <th>prosciutto</th>
+                    </tr>
+
+                    <tr>
+                        <th id="numDiavola">0</th>
+                        <th>diavola</th>
+                    </tr>
+
+                    <tr>
+                        <th id="numFunghi">0</th>
+                        <th>funghi</th>
+                    </tr>
+
+                    <tr>
+                        <th id="numWurstel">0</th>
+                        <th>wurstel</th>
+                    </tr>
+
+                    <tr>
+                        <th id="numPatatine">0</th>
+                        <th>patatine</th>
+                    </tr>
+                    -->
+
+                </table>
+
+                <button type="button" onclick="carrello.reset();">RESET</button>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
