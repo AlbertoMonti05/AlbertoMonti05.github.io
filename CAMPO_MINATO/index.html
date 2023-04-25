@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<hmtl>
+
+    <head>
+
+        <title>CAMPO MINATO</title>
+
+        <style>
+
+            /*parte alta dello schermo*/
+            .grid-container-header
+            {
+                display: grid;
+                grid-template-columns: auto auto auto;
+            }
+
+            /*elementi della parte alta*/
+            .grid-header-item
+            {
+                border: 1px solid rgba(0, 0, 0, 0.8);
+                text-align: center;
+                background-color: red;
+                width: auto;
+            }
+
+            
+
+            /*griglia delle celle grigie*/
+            .grid-container-cells
+            {
+                display: grid;
+                grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+                width: 600px;
+            }
+
+            /*celle coperte*/
+            .close-cells
+            {
+                background-color: gray;
+                border: 1px solid rgba(0, 0, 0, 0.8);
+                width: 60px;
+                height: 60px;
+                text-align: center;
+                top: 50%;
+            }
+
+            /*celle scoperte*/
+            .open-cells
+            {
+                background-color: white;
+                border: 1px solid rgba(0, 0, 0, 0.8);
+                width: 60px;
+                height: 60px;
+            }
+
+            /*celle con la bomba*/
+            .bomb-cells
+            {
+                background-color: red;
+                border: 1px solid rgba(0, 0, 0, 0.8);
+                width: 60px;
+                height: 60px;
+            }
+
+        </style>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script type="text/javascript" src="CCella.js"></script>
+        <script type="text/javascript" src="CCampo.js"></script>
+
+        <script type="text/javascript">
+
+            const campo = new CCampo();
+            campo.creaCampo();
+
+        </script>
+
+    </head>
+
+    <body>
+
+
+        <div id="divHeader" class="grid-container-header">
+
+            <div class="grid-header-item"><p id="numeroBombeNelCampo">BOMBE NEL CAMPO: 5</p></div>
+            <div class="grid-header-item" onclick="campo.reset();"><p>RESET</p></div> 
+            <div class="grid-header-item"><p id="tempoRimasto">TEMPO RIMASTO = 10</p></div>
+
+        </div>
+
+        <div id="divCells" class="grid-container-cells">
+
+            
+
+        </div>
+
+        
+    </body>
+
+</html>
