@@ -7,6 +7,12 @@
 
         <style>
 
+            div
+            {
+                text-align: center;
+                font-size: large;
+            }
+
             /*parte alta dello schermo*/
             .grid-container-header
             {
@@ -62,6 +68,15 @@
                 height: 60px;
             }
 
+            /*celle con la bandiera*/
+            .flag-cells
+            {
+                background-color: orange;
+                border: 1px solid rgba(0, 0, 0, 0.8);
+                width: 60px;
+                height: 60px;
+            }
+
         </style>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -82,9 +97,9 @@
 
         <div id="divHeader" class="grid-container-header">
 
-            <div class="grid-header-item"><p id="numeroBombeNelCampo">BOMBE NEL CAMPO: 5</p></div>
-            <div class="grid-header-item" onclick="campo.reset();"><p>RESET</p></div> 
-            <div class="grid-header-item"><p id="tempoRimasto">TEMPO RIMASTO = 10</p></div>
+            <div class="grid-header-item"><p style="font-size: medium;" id="numeroBombeNelCampo">NUMERO BOMBE NEL CAMPO:</p></div>
+            <div class="grid-header-item" onclick="campo.reset();"><p style="font-size: medium;">RESET</p></div> 
+            <div class="grid-header-item"><p style="font-size: medium;" id="tempoRimasto">TEMPO RIMASTO = 10</p></div>
 
         </div>
 
