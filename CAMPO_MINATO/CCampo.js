@@ -5,6 +5,7 @@ class CCampo
         this.bombeMax = 6;
         this.colonneMax = 10;
         this.righeMax = 6;
+        this.bandierePosizionate = 0;
 
         //imposto il numero di bombe nell'html
         //document.getElementById("numeroBombeNelCampo").innerHTML = "NUMERO BOMBE NEL CAMPO: " + this.bombeMax;
@@ -101,17 +102,72 @@ class CCampo
         }
     }
 
-    //metodo per cambiare la cella da una close-cells a una falg-cells
-    changeInFlagCell(cella)
+    //metodo per cambiare la cella in una falg-cells
+    //se è una flag-cells ritorna come in partenza
+    changeInFlagCells(cella)
     {
-        //se la cella è aperta non posso metterci la bandiera
-        if(cella.getAttribute("class") == "open-cells")
+        //posso mettere le bandiere fino a raggiungere il numero di bombe presenti nel campo
+        if(this.bandierePosizionate == this.bombeMax)
         {
-            return false;
+            return;
         }
 
-        //la cella passa dalla classe close-cells alla classe flag-cells
-        $(document).ready(function(){
+        //dichiaro una variabile per contenere la classe della cella
+        let classe = cella.getAttribute("class");
+
+        //prendo la scritta nella cella
+        //se nella cella c'è un numero non posso farla diventare una flag-cells
+        //let x = cella.innerHTML;
+
+        //se la cella è aperta non posso metterci la bandiera
+        if(classe == "open-cells") //if(classe == "open-cells" || x == "")
+        {
+            return;
+        }
+
+        //se è una flag-cells
+        if(classe == "flag-cells")
+        {
+            //la cella torna a essere come in partenza
+
+            //prendo le coordinate della cella per controllare se inizialmente era una bomba
+            let riga = this.getRow(cella);
+            let colonna = this.getColoumn(cella);
+            let is_a_bomb = this.controlloCoordinateBomba(riga, colonna);
+
+            //se era una bomba
+            if(is_a_bomb == true)
+            {
+                //rimuovo la classe flag-cells
+                $(cella).removeClass("flag-cells");
+
+                //aggiugno la classe bomb-cells
+                $(cella).addClass("bomb-cells");
+
+                this.bandierePosizionate--;
+
+                return;
+            }
+
+            //se sono qui allora inizialmente non era bomba
+
+            //rimuovo la classe flag-cells
+            $(cella).removeClass("flag-cells");
+
+            //aggiugno la classe close-cells
+            $(cella).addClass("close-cells");
+
+
+            //decremento il numero di bandiere posizionate
+            this.bandierePosizionate--;
+
+            return;
+        }
+
+        //se è una close-cells
+        if(classe == "close-cells")
+        {
+            //la cella passa dalla classe close-cells alla classe flag-cells
 
             //rimuovo la classe close-cells
             $(cella).removeClass("close-cells");
@@ -119,13 +175,34 @@ class CCampo
             //aggiugno la classe flag-cells
             $(cella).addClass("flag-cells");
 
-        });
+
+            //incremento il numero di bandiere posizionate
+            this.bandierePosizionate++;
+
+            return;
+        }
+
+        //se è una bomb-cells
+        if(classe == "bomb-cells")
+        {
+            //la cella passa dalla classe bomb-cells alla classe flag-cells
+
+            //rimuovo la classe bomb-cells
+            $(cella).removeClass("bomb-cells");
+
+            //aggiugno la classe flag-cells
+            $(cella).addClass("flag-cells");
+
+
+            //incremento il numero di bandiere posizionate
+            this.bandierePosizionate++;
+
+            return;
+        }
     }
 
     /*
-        metodo richiamato durante la creazione del campo 
-
-        serve per controllare se le coordinate corrispondono alla posizione di una bomba
+        metodo per controllare se le coordiante appartengono a una bomb-cells
 
         true --> corrispondono a una bomba
         false --> non corrispondono a una bomba
@@ -168,7 +245,7 @@ class CCampo
     openCell(cella)
     {
         //la cella passa dalla classe close-cells alla classe open-cells
-        $(document).ready(function(){
+        //$(document).ready(function(){
 
             //rimuovo la classe close-cells
             $(cella).removeClass("close-cells");
@@ -176,7 +253,7 @@ class CCampo
             //aggiugno la classe open-cells
             $(cella).addClass("open-cells");
 
-        });
+        //});
     }
 
     //metodo per controllare se in una cella c'è la bomba
@@ -201,6 +278,12 @@ class CCampo
     */
     checkCell(cella)
     {
+        //se viene cliccata una flag-cells non faccio nulla
+        if(cella.getAttribute("class") == "flag-cells")
+        {
+            return;
+        }
+
         //controllo che la cella non sia una bomba
         this.check_if_is_a_bomb(cella);
 
@@ -212,11 +295,174 @@ class CCampo
         {
             //apro la cella
             this.openCell(cella);
+
+            //controllo le celle accanto
+            this.checkNearCells(cella);
         }
         else
         {
             //inserisco nel div il numero di bombe presenti nelle celle affianco
             cella.innerHTML = cntBombe;
+        }
+    }
+
+    //metodo per controllare la cella accanto a un cella aperta
+    checkCellNoBomb(cella)
+    {
+        /*
+            questo metodo è uguale al metodo checkCell ma senza richiamare
+            il metodo check_if_is_a_bomb perchè nella cella non c'è di sicuro
+            una bomba
+        */
+
+        //controllo prima di tutto se la cella è già diversa da close-cells
+        let classeCella = cella.getAttribute("class");
+        if(classeCella != "close-cells")
+        {
+            //interrompo il metodo
+            return;
+        }
+
+        //prendo il numero di bombe attorno alla cella
+        let cntBombe = this.howManyBomb(cella);
+        
+        //se non ci sono bombe nelle vicenze (cntBombe == 0) apro la cella
+        if(cntBombe == 0)
+        {
+            //apro la cella
+            this.openCell(cella);
+
+            //controllo le celle accanto
+            this.checkNearCells(cella);
+        }
+        else
+        {
+            //inserisco nel div il numero di bombe presenti nelle celle affianco
+            cella.innerHTML = cntBombe;
+        }
+    }
+
+    //metodo per aprire le celle accanto alla cella passata come parametro
+    checkNearCells(cella)
+    {
+        /*
+            'cella' è la cella appena aperta
+
+            visto che la cella è stata aperta, attorno ad essa non ci sono
+            delle bombe
+
+            quindi non controllo se le celle attorno sono delle bombe, controllo
+            solo se attorno ad esse ci sono delle bombe; se anche queste si apriranno,
+            anche per loro si eseguirà questo procedimento
+
+            se la cella accanto ha attorno delle bombe, questa visualizzarà il numero
+            di bombe presenti attorno ad essa
+
+            per fare tutto questo basta solamente prendere la cella accanto
+            e richiamare il metodo checkCell (metodo richiamato al click su una cella)
+        */
+
+        //prendo la riga e la colonna della cella appena aperta
+        let riga = this.getRow(cella);
+        let colonna = this.getColoumn(cella);
+
+        /*
+           r-1 r-1 c+1
+           r-1 *** r+1
+           r-1 *** r+1
+           c-1 c-1 r+1
+
+           parto verso l'altro e poi giro verso destra
+           per ogni cella richiamo il metodo
+        */
+
+        //dichiaro una variabile per contenere tutte le celle da controllare
+        let cellaX = cella;
+        /*
+            le celle verranno prese con il metodo giveMeCell che ritorna un vettore
+
+            la nostra cella sarà l'unico elemento del vettore e quindi sarà sempre in indice[0]
+        */
+
+        //prima di controllare la cella devo controllare che siano delle coordiante valide
+        riga--;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
+        }
+
+        colonna++;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
+        }
+
+        riga++;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
+        }
+
+        riga++;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
+        }
+
+        colonna--;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
+        }
+
+        colonna--;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
+        }
+
+        riga--;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
+        }
+
+        riga--;
+        if(this.is_a_valid_cell(riga, colonna))
+        {
+            //prendo la cella
+            cellaX = this.giveMeCell(riga,colonna);
+
+            //controllo la cella
+            this.checkCellNoBomb(cellaX[0]);
         }
     }
 
@@ -311,10 +557,10 @@ class CCampo
         /*
             prendo la cella in base a riga e colonna
 
-            il calcolo ritornerà un vettore, per questo nell'if ci sarà cella[0]
+            il metodo ritornerà un vettore, per questo nell'if ci sarà cella[0]
             la nostra cella è l'unico elemento nel vettore e quindi sarà al primo indice
         */
-        let cella = $("div[data-row='" + riga +"'][data-coloumn='" + colonna +"']");
+        let cella = this.giveMeCell(riga, colonna);
 
         //controllo la classe della cella
         if(cella[0].getAttribute("class") == "bomb-cells")
@@ -323,5 +569,16 @@ class CCampo
         }
 
         return 0;
+    }
+
+    //metodo per prendere la cella tramite riga e colonna
+    giveMeCell(riga, colonna)
+    {
+        /*
+            il calcolo ritornerà un vettore
+
+            la nostra cella è l'unico elemento nel vettore e quindi sarà al primo indice [0]
+        */
+        return $("div[data-row='" + riga +"'][data-coloumn='" + colonna +"']");
     }
 }
