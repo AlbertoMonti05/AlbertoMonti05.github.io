@@ -7,7 +7,7 @@ class CCampo
         this.righeMax = 6;
 
         //imposto il numero di bombe nell'html
-        document.getElementById("numeroBombeNelCampo").innerHTML = "NUMERO BOMBE NEL CAMPO: " + this.bombeMax;
+        //document.getElementById("numeroBombeNelCampo").innerHTML = "NUMERO BOMBE NEL CAMPO: " + this.bombeMax;
 
         //prendo le coordinate (casuali) in cui mettere le bombe
         this.coordinateBombe = [];
