@@ -2,17 +2,101 @@ class CCampo
 {
     constructor()
     {
-        this.bombeMax = 6;
-        this.colonneMax = 10;
-        this.righeMax = 6;
+        /*
+            bombeMax, colonneMax e righeMax verranno settate 
+            dopo la scelta della difficolta'
+        */
+        this.bombeMax = -1;
+        this.colonneMax = -1;
+        this.righeMax = -1;
+
         this.bandierePosizionate = 0;
 
-        //imposto il numero di bombe nell'html
-        //document.getElementById("numeroBombeNelCampo").innerHTML = "NUMERO BOMBE NEL CAMPO: " + this.bombeMax;
-
-        //prendo le coordinate (casuali) in cui mettere le bombe
         this.coordinateBombe = [];
-        this.prendiCoordianteBombe();
+
+        this.timer = new CTimer();
+    }
+
+    //metodo per creare il campo con il livello di difficolta' scelto dall'utente
+    setLevelOfDifficult()
+    {
+        //prendo il livello di difficolta'
+        let difficolta = $("#difficolta").val();
+
+        //controllo quale livello è stato scelto
+        if(difficolta == 1)
+        {
+            this.righeMax = 10;
+            this.colonneMax = 10;
+            this.bombeMax = 10;
+
+            //60 secondi massimo
+            this.timer.setTime(60);
+        }
+        else if(difficolta == 2)
+        {
+            this.righeMax = 15;
+            this.colonneMax = 15;
+            this.bombeMax = 20;
+
+            //120 secondi massimo
+            this.timer.setTime(120);
+        }
+        else if(difficolta == 3)
+        {
+            this.righeMax = 20;
+            this.colonneMax = 20;
+            this.bombeMax = 50;
+
+            //180 secondi massimo
+            this.timer.setTime(180);
+        }
+
+        //creo una stringa per le colonne da assegnare alla classe del div delle celle
+        let str = "";
+        for(let i = 0; i < this.colonneMax; i++)
+        {
+            str += "auto ";
+        }
+
+        //aggiungo alla classe del div delle celle le colonne che deve avere
+        //$(".grid-container-cells").css("display", "grid");
+        $(".grid-container-cells").css("grid-template-columns", str);
+        //$(".grid-container-cells").css("width", "600px");
+
+        //imposto il numero di bombe nell'html
+        document.getElementById("numeroBombeNelCampo").innerHTML = "NUMERO BOMBE NEL CAMPO: " + this.bombeMax;
+
+        /*
+            prima di creare il campo lo svuoto per sicurezza
+            svuoto anche il vettore con le coordinate delle bombe
+        */
+        $("#divCells").empty();
+        this.coordinateBombe = [];
+
+        //creo il campo con la difficoltà scelta
+        this.creaCampo();
+    }
+
+    //metodo per far scorrere il timer
+    whatTimeIsIt()
+    {
+        //prendo il tempo e lo decremento
+        let x = this.timer.getTime();
+        x--;
+
+        //se è finito il tempo
+        if(x == 0)
+        {
+            alert("E' FINITO IL TEMPO! HAI PERSO");
+            this.showAllBomb();
+        }
+
+        //imposto il tempo corretto
+        this.timer.setTime(x);
+
+        //ritorno il temmpo
+        return x;
     }
 
     //metodo per prendere le coordinate (casuali) delle bombe
@@ -22,7 +106,7 @@ class CCampo
         let colonna = -1;
         let coordinata = "";
 
-        //per 6 volte
+        //per bombeMax volte
         for(let i = 0; i <= this.bombeMax; i++)
         {
             //genero la colonna
@@ -61,17 +145,20 @@ class CCampo
     */
     creaCampo()
     {
+        //prendo le coordinate (casuali) in cui mettere le bombe
+        this.prendiCoordianteBombe();
+
         //creo il campo nell'html
-        //per 6 volte aggiungo una riga da 10 colonne
-        for(let riga = 0; riga < 6; riga++)
+        //per righeMax volte aggiungo una riga da colnneMax colonne
+        for(let riga = 0; riga < this.righeMax; riga++)
         {
-            this.aggiugniRiga(riga);
+            this.aggiugniColonna(riga);
         }
     }
 
-    aggiugniRiga(riga)
+    aggiugniColonna(riga)
     {
-        for(let colonna = 0; colonna < 10; colonna++)
+        for(let colonna = 0; colonna < this.colonneMax; colonna++)
         {
             /*
                 aggiungo una cella al campo
@@ -87,7 +174,7 @@ class CCampo
             {
                 $(document).ready(function(){
 
-                    $("#divCells").append("<div class='bomb-cells' onclick='campo.checkCell(this);' oncontextmenu='campo.changeInFlagCells(this);' data-row=" + riga + " data-coloumn=" + colonna + "></div>");
+                    $("#divCells").append("<div class='close-cells' data-bomb=" + true + " onclick='campo.checkCell(this);' oncontextmenu='campo.changeInFlagCells(this);' data-row=" + riga + " data-coloumn=" + colonna + "></div>");
 
                 });
             }
@@ -95,7 +182,7 @@ class CCampo
             {
                 $(document).ready(function(){
 
-                    $("#divCells").append("<div class='close-cells' onclick='campo.checkCell(this);' oncontextmenu='campo.changeInFlagCells(this);' data-row=" + riga + " data-coloumn=" + colonna + "></div>");
+                    $("#divCells").append("<div class='close-cells' data-bomb=" + false + " onclick='campo.checkCell(this);' oncontextmenu='campo.changeInFlagCells(this);' data-row=" + riga + " data-coloumn=" + colonna + "></div>");
 
                 });
             }
@@ -106,21 +193,15 @@ class CCampo
     //se è una flag-cells ritorna come in partenza
     changeInFlagCells(cella)
     {
-        //posso mettere le bandiere fino a raggiungere il numero di bombe presenti nel campo
-        if(this.bandierePosizionate == this.bombeMax)
-        {
-            return;
-        }
-
         //dichiaro una variabile per contenere la classe della cella
         let classe = cella.getAttribute("class");
 
         //prendo la scritta nella cella
         //se nella cella c'è un numero non posso farla diventare una flag-cells
-        //let x = cella.innerHTML;
+        let x = cella.innerHTML;
 
         //se la cella è aperta non posso metterci la bandiera
-        if(classe == "open-cells") //if(classe == "open-cells" || x == "")
+        if(classe == "open-cells" || x != "") //if(classe == "open-cells")
         {
             return;
         }
@@ -133,16 +214,17 @@ class CCampo
             //prendo le coordinate della cella per controllare se inizialmente era una bomba
             let riga = this.getRow(cella);
             let colonna = this.getColoumn(cella);
-            let is_a_bomb = this.controlloCoordinateBomba(riga, colonna);
+            //let is_a_bomb = this.controlloCoordinateBomba(riga, colonna);
 
+            /*
             //se era una bomba
             if(is_a_bomb == true)
             {
                 //rimuovo la classe flag-cells
                 $(cella).removeClass("flag-cells");
 
-                //aggiugno la classe bomb-cells
-                $(cella).addClass("bomb-cells");
+                //aggiugno la classe close-cells
+                $(cella).addClass("close-cells");
 
                 this.bandierePosizionate--;
 
@@ -150,6 +232,7 @@ class CCampo
             }
 
             //se sono qui allora inizialmente non era bomba
+            */
 
             //rimuovo la classe flag-cells
             $(cella).removeClass("flag-cells");
@@ -161,11 +244,14 @@ class CCampo
             //decremento il numero di bandiere posizionate
             this.bandierePosizionate--;
 
+            //cambio il numero di bombe rimaste
+            document.getElementById("numeroBombeNelCampo").innerHTML = "NUMERO BOMBE NEL CAMPO: " + (-(this.bandierePosizionate - this.bombeMax));
+
             return;
         }
 
-        //se è una close-cells
-        if(classe == "close-cells")
+        //se è una close-cells e posso ancora mettere bandiere
+        if(classe == "close-cells" && this.bandierePosizionate != this.bombeMax)
         {
             //la cella passa dalla classe close-cells alla classe flag-cells
 
@@ -179,11 +265,18 @@ class CCampo
             //incremento il numero di bandiere posizionate
             this.bandierePosizionate++;
 
+            //cambio il numero di bombe rimaste
+            document.getElementById("numeroBombeNelCampo").innerHTML = "NUMERO BOMBE NEL CAMPO: " + (-(this.bandierePosizionate - this.bombeMax));
+
+            //controllo la vincita
+            this.controllaVincita();
+
             return;
         }
 
-        //se è una bomb-cells
-        if(classe == "bomb-cells")
+        /*
+        //se è una bomb-cells e posso ancora mettere bandiere
+        if(classe == "bomb-cells" && this.bandierePosizionate != this.bombeMax)
         {
             //la cella passa dalla classe bomb-cells alla classe flag-cells
 
@@ -197,7 +290,127 @@ class CCampo
             //incremento il numero di bandiere posizionate
             this.bandierePosizionate++;
 
+            //controllo la vincita
+            this.controllaVincita();
+
             return;
+        }
+        */
+    }
+
+    //metodo per controllare se l'utente ha vinto la partita
+    controllaVincita()
+    {
+        //controllo la vincita solo se ho posizionato un numero di bandiere uguale a quello delle bombe
+        if(this.bandierePosizionate == this.bombeMax)
+        {
+            //controllo se le bandiere sono state messe su tutte le bombe
+            let coordinate = this.prendiCoordinateFlagCells();
+
+            //confronto queste coordinate con le coordinate delle bombe
+            this.confrontaCoordinate(coordinate);
+        }
+    }
+
+    /*
+        metodo per trovare le coordinate delle falg-cells inserite
+
+        ritorna un vettore con le coordinate
+    */
+    prendiCoordinateFlagCells()
+    {
+        //inizializzo una variabile che conterrà tutte le celle
+        let cellaX = -1;
+
+        //stringa che conterrà tutte le coordinate da aggiungere nel vettore
+        let coordinata = "";
+
+        //contatore di flag trovate
+        let cntFlag = 0;
+
+        //vettore che conterrà le coordinate
+        let coordinate = [];
+
+        //per ogni riga
+        for(let riga = 0; riga < this.righeMax; riga++)
+        {
+            //scorro tutte le colonne
+            for(let colonna = 0; colonna < this.colonneMax; colonna++)
+            {
+                //prendo la cella
+                cellaX = this.giveMeCell(riga, colonna);
+
+                //se è una flag-cells
+                if(cellaX[0].getAttribute("class") == "flag-cells")
+                {
+                    //creo la coordinata
+                    coordinata += riga + ";" + colonna;
+
+                    //aggiungo la coordianta della bomba al vettore
+                    coordinate[cntFlag++] = coordinata;
+
+                    //svuoto le coordinate
+                    coordinata = "";
+
+                    //se ho trovato tutte le flag-cells ritorno le coordinate
+                    if(cntFlag == this.bombeMax)
+                    {
+                        return coordinate;
+                    }
+                }
+            }
+        }
+
+        //ritorno le coordinate
+        return coordinate;
+    }
+
+    /*
+        metodo per confrontare le coordinate delle flag-cells con quelle delle bomb-cells
+
+        se tutte sono giuste l'utente ha vinto (lo avviso)
+
+        se almeno una è sbagliata non ha vinto (lo avviso)
+    */
+    confrontaCoordinate(coordinateFlagCells)
+    {
+        //creo un vettore temporaneo per le coordinate delle flag e uno per le bombe
+        let tempFlag = [];
+        let tempBomb = [];
+
+        let bombeTrovate = 0;
+
+        //per ogni coordinata di flag-cells
+        for(let i = 0; i < coordinateFlagCells.length; i++)
+        {
+            //scorro le coordinate delle bomb-cells
+            for(let j = 0; j < this.coordinateBombe.length; j++)
+            {
+                //divido le coordinate nei vettori
+                tempFlag = coordinateFlagCells[i].split(';');
+                let tempBomb = [];
+
+                //se le coordinate corrispondono
+                if(tempFlag[0] == tempBomb[0] && tempFlag[1] == tempBomb[1])
+                {
+                    bombeTrovate++;
+                    continue;
+                }
+            }
+        }
+
+        //se le posizioni sono tutte corrette
+        if(bombeTrovate == this.bombeMax)
+        {
+            //hai vinto
+            alert("HAI TROVATO TUTTE LE BOMBE");
+
+            //faccio ripartire il gioco
+            this.reset();
+        }
+        else
+        {
+            alert("NON HAI TROVATO TUTTE LE BOMBE");
         }
     }
 
@@ -259,13 +472,39 @@ class CCampo
     //metodo per controllare se in una cella c'è la bomba
     check_if_is_a_bomb(cella)
     {
-        //prendo la classe della cella
-        let classeCella = cella.getAttribute("class");
+        //vedo se la cella è una bomba
+        let is_a_bomb = cella.getAttribute("data-bomb");
 
-        if(classeCella == "bomb-cells")
+        if(is_a_bomb == "true")
         {
             alert("HAI PERSO");
-            location.reload();
+            //location.reload();
+
+            //scopro tutte le bombe
+            this.showAllBomb();
+
+            return true;
+        }
+
+        return false;   
+    }
+
+    //metodo per mostrare tutte le bombe
+    showAllBomb()
+    {
+        let cella = -1;
+        let tempBomb = [];
+
+        //scorro le coordinate delle bombe
+        for(let i = 0; i < this.coordinateBombe.length; i++)
+        {
+            tempBomb = this.coordinateBombe[i].split(';');
+
+            //prendo la cella della bomba
+            cella = this.giveMeCell(tempBomb[0], tempBomb[1]);
+
+            //metto alla cella lo sfondo rosso
+            $(cella).css({backgroundColor: 'red'});
         }
     }
 
@@ -285,7 +524,10 @@ class CCampo
         }
 
         //controllo che la cella non sia una bomba
-        this.check_if_is_a_bomb(cella);
+        if(this.check_if_is_a_bomb(cella) == true)
+        {
+            return;
+        }
 
         //prendo il numero di bombe attorno alla cella
         let cntBombe = this.howManyBomb(cella);
@@ -560,14 +802,26 @@ class CCampo
             il metodo ritornerà un vettore, per questo nell'if ci sarà cella[0]
             la nostra cella è l'unico elemento nel vettore e quindi sarà al primo indice
         */
-        let cella = this.giveMeCell(riga, colonna);
+        //let cella = this.giveMeCell(riga, colonna);
 
         //controllo la classe della cella
+        /*
         if(cella[0].getAttribute("class") == "bomb-cells")
         {
             return 1;
         }
 
+        return 0;
+        */
+
+        //controllo le coordinate per vedere se appartengono a quelle di una bomba
+        if(this.controlloCoordinateBomba(riga, colonna) == true)
+        {
+            //appartengono
+            return 1;
+        }
+
+        //non appartengono
         return 0;
     }
 
