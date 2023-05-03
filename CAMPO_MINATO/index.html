@@ -29,7 +29,6 @@
                 width: auto;
             }
 
-            
 
             /*griglia delle celle grigie*/
             .grid-container-cells
@@ -60,6 +59,7 @@
             }
 
             /*celle con la bomba*/
+            /*
             .bomb-cells
             {
                 background-color: red;
@@ -67,6 +67,8 @@
                 width: 60px;
                 height: 60px;
             }
+            */
+            /*le celle con la bomba hanno ora data-nomn = true ..... quelle senza hanno data-bomb = false*/
 
             /*celle con la bandiera*/
             .flag-cells
@@ -80,13 +82,96 @@
         </style>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script type="text/javascript" src="CCella.js"></script>
+        <script type="text/javascript" src="CTimer.js"></script>
         <script type="text/javascript" src="CCampo.js"></script>
 
+        
         <script type="text/javascript">
 
+            /*
             const campo = new CCampo();
-            campo.creaCampo();
+            //campo.creaCampo();
+
+            const timer = new CTimer();
+            let start = true;
+            let timeout = 0;
+            timeout = setInterval(tictoc, 1000);
+
+            function startStop()
+            {
+                /*
+                if(start == true)
+                {
+                    start = false;
+                }
+                else
+                {
+                    start = true;
+                }
+                */
+               /*
+                start = !start;
+
+                if(start == true)
+                {
+                    timeout = setInterval(tictoc, 1000);
+                }
+                else
+                {
+                    clearTimeout(timeout);
+                }
+            }
+
+            function tictoc()
+            {
+                document.getElementById("tempoRimasto").innerHTML = "TEMPO RIMASTO: " + timer.whatTimeIsIt();
+            }
+            */
+
+            const campo = new CCampo();
+            //campo.creaCampo();
+
+            const timer = new CTimer();
+            let start = true;
+            let timeout = 0;
+            timeout = setInterval(tictoc, 1000);
+
+            function startStop()
+            {
+                /*
+                if(start == true)
+                {
+                    start = false;
+                }
+                else
+                {
+                    start = true;
+                }
+                */
+               
+                start = !start;
+
+                if(start == true)
+                {
+                    timeout = setInterval(tictoc, 1000);
+                }
+                else
+                {
+                    clearTimeout(timeout);
+                }
+            }
+
+            function tictoc()
+            {
+                let x = campo.whatTimeIsIt();
+
+                document.getElementById("tempoRimasto").innerHTML = "TEMPO RIMASTO: " + x;
+
+                if(x == 0)
+                {
+                    clearTimeout(timeout);
+                }
+            }
 
         </script>
 
@@ -94,12 +179,24 @@
 
     <body>
 
+        LIVELLO DI DIFFICOLTA':
+        <select id="difficolta" onchange="campo.setLevelOfDifficult();">
+
+            <option value="" selected></option>
+            <option value="1">facile</option>
+            <option value="2">medio</option>
+            <option value="3">difficile</option>
+
+        </select>
+        <br>
+
+        <button onclick="startStop();">START/STOP TIMER</button>
 
         <div id="divHeader" class="grid-container-header">
 
             <div class="grid-header-item"><p style="font-size: medium;" id="numeroBombeNelCampo">NUMERO BOMBE NEL CAMPO:</p></div>
             <div class="grid-header-item" onclick="campo.reset();"><p style="font-size: medium;">RESET</p></div> 
-            <div class="grid-header-item"><p style="font-size: medium;" id="tempoRimasto">TEMPO RIMASTO = 10</p></div>
+            <div class="grid-header-item"><p style="font-size: medium;" id="tempoRimasto"></p></div>
 
         </div>
 
@@ -108,7 +205,6 @@
             
 
         </div>
-
         
     </body>
 
