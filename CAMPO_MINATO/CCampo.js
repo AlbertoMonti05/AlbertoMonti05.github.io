@@ -15,6 +15,8 @@ class CCampo
         this.coordinateBombe = [];
 
         this.timer = new CTimer();
+
+        this.finePartita = false;
     }
 
     //metodo per creare il campo con il livello di difficolta' scelto dall'utente
@@ -81,6 +83,11 @@ class CCampo
     //metodo per far scorrere il timer
     whatTimeIsIt()
     {
+        if(this.finePartita == true)
+        {
+            return this.timer.getTime();
+        }
+
         //prendo il tempo e lo decremento
         let x = this.timer.getTime();
         x--;
@@ -193,6 +200,11 @@ class CCampo
     //se è una flag-cells ritorna come in partenza
     changeInFlagCells(cella)
     {
+        if(this.finePartita == true)
+        {
+            return;
+        }
+
         //dichiaro una variabile per contenere la classe della cella
         let classe = cella.getAttribute("class");
 
@@ -405,8 +417,10 @@ class CCampo
             //hai vinto
             alert("HAI TROVATO TUTTE LE BOMBE");
 
+            this.finePartita = true;
+
             //faccio ripartire il gioco
-            this.reset();
+            //this.reset();
         }
         else
         {
@@ -483,6 +497,8 @@ class CCampo
             //scopro tutte le bombe
             this.showAllBomb();
 
+            this.finePartita = true;
+
             return true;
         }
 
@@ -517,6 +533,10 @@ class CCampo
     */
     checkCell(cella)
     {
+        if(this.finePartita == true)
+        {
+            return
+        }
         //se viene cliccata una flag-cells non faccio nulla
         if(cella.getAttribute("class") == "flag-cells")
         {
@@ -531,7 +551,7 @@ class CCampo
 
         //prendo il numero di bombe attorno alla cella
         let cntBombe = this.howManyBomb(cella);
-        
+            
         //se non ci sono bombe nelle vicenze (cntBombe == 0) apro la cella
         if(cntBombe == 0)
         {
