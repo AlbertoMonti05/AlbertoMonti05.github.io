@@ -1,0 +1,70 @@
+<html>
+
+    <head>
+
+        <title>TO DO LIST</title>
+
+        <script type="text/javascript" src="CToDo.js"></script>
+        <script type="text/javascript" src="CGestioneToDo.js"></script>
+
+        <script type="text/javascript">
+
+            const gest = new CGestioneToDo();
+
+        </script>
+
+    </head>
+
+    <body>
+
+        <h1 style="text-align: center;">TO DO LIST</h1>
+
+        <p>
+
+            <table id="tblNewToDo">
+
+                <th>
+
+                    <input type="text" id="txtToDo" value="Inserisci l'evento">
+
+                </th>
+
+
+                <th>
+
+                    <input type="date" id="dateToDo">
+
+                </th>
+
+
+                <th>
+
+                    <button type="button" id="btnToDO" onclick = gest.aggiungiToDo();>aggiungi toDo</button>
+                    <button type="button" id="btnEliminaToDO" onclick = gest.eliminaTuttaToDoList();>elimina tutti toDo</button>
+                    <button type="button" id="btnToDoUrgenti" onclick = gest.visualizzaUrgentiNellaTabella();>visualizza solo toDo urgenti</button>
+                    <button type="button" id="btnToDoPerData" onclick = gest.visualizzaPerData();>visualizza toDo per data</button>
+                    <button type="button" id="btnToDoPerData" onclick = gest.visualizzaCompletate();>visualizza completate</button>
+                    <button type="button" id="btnToDoPerData" onclick = gest.visualizzaNonCompletate();>visualizza non completate</button>
+                    <button type="button" id="btnToDoPerData" onclick = gest.visualizzaTutte();>visualizza tutte</button>
+                    <button type="button" id="btnSaveToDo" onclick = gest.saveToDo();>salva to do</button>
+                    <button type="button" id="btnUploadToDo" onclick = gest.uploadToDo();>carica to do</button>
+
+                </th>
+
+            </table>
+
+        </p>
+
+        <p>
+
+            <table id="tblToDo">
+
+
+
+            </table>
+
+        </p>
+
+    </body>
+
+</html>
